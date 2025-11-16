@@ -1,0 +1,36 @@
+/**
+ * Default configuration values
+ *
+ * Research-backed default thresholds for all rules
+ */
+
+import type { Config } from './types';
+
+/**
+ * Default configuration with research-backed thresholds
+ */
+export const defaultConfig: Config = {
+  rules: {
+    'max-edges': {
+      enabled: true,
+      severity: 'error',
+      threshold: 100,
+    },
+    'max-nodes-high-density': {
+      enabled: true,
+      severity: 'warning',
+      threshold: 50,
+      densityThreshold: 0.3,
+    },
+    'max-nodes-low-density': {
+      enabled: true,
+      severity: 'warning',
+      threshold: 100,
+    },
+    'cyclomatic-complexity': {
+      enabled: true,
+      severity: 'warning',
+      threshold: 10,
+    },
+  },
+};
