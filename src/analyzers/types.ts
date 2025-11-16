@@ -26,4 +26,6 @@ export interface AnalysisResult {
   diagram: import('../extractors/types').Diagram;
   /** Calculated metrics for the diagram */
   metrics: Metrics;
+  /** Issues found by rules (optional) */
+  issues?: import('../rules/types').Issue[];
 }

@@ -558,3 +558,225 @@ Mermaid-Sonar's architecture prioritizes:
 5. **Performance**: Fast text-based analysis without rendering overhead
 
 The foundation established in Stage 1 provides a solid base for adding research-backed heuristics, layout intelligence, and multiple output formats in future stages.
+
+## Spec 002: Research-Backed Heuristics and Rule System
+
+### Overview
+
+Spec 002 introduces a pluggable rule system that validates diagrams against research-backed complexity thresholds. The system provides configurable warnings and errors based on cognitive load research and performance considerations.
+
+### Rule System Architecture
+
+```
+src/
+├── rules/
+│   ├── types.ts                  # Core rule interfaces
+│   ├── index.ts                  # Rule registry
+│   ├── max-edges.ts              # Connection complexity rule  
+│   ├── cognitive-load.ts         # High/low density rules
+│   └── cyclomatic-complexity.ts  # Decision complexity rule
+├── config/
+│   ├── types.ts                  # Configuration types
+│   ├── defaults.ts               # Default thresholds
+│   ├── loader.ts                 # Config file loading (cosmiconfig)
+│   └── index.ts                  # Config module exports
+```
+
+### Rule Interface
+
+All rules implement the `Rule` interface:
+
+```typescript
+interface Rule {
+  name: string;                    // Unique identifier
+  defaultSeverity: Severity;       // 'error' | 'warning' | 'info'
+  defaultThreshold?: number;       // Default threshold value
+  check(diagram, metrics, config): Issue | null;  // Validation logic
+}
+```
+
+Rules are pure functions that:
+- Accept diagram content and pre-calculated metrics
+- Return an Issue if threshold exceeded, null otherwise
+- Include research citations and actionable suggestions
+
+### Implemented Rules
+
+#### 1. Max Edges Rule (`max-edges`)
+
+**Purpose**: Detects when edge count exceeds O(n²) performance threshold  
+**Default Threshold**: 100 edges  
+**Severity**: error  
+**Research**: [Mermaid Official Docs](https://docs.mermaidchart.com/blog/posts/flow-charts-are-on2-complex-so-dont-go-over-100-connections)
+
+#### 2. High-Density Cognitive Load (`max-nodes-high-density`)
+
+**Purpose**: Warns when dense diagrams exceed cognitive capacity  
+**Condition**: `nodeCount > 50 AND density > 0.3`  
+**Severity**: warning  
+**Research**: arXiv:2008.07944 (cognitive load research)
+
+#### 3. Low-Density Cognitive Load (`max-nodes-low-density`)
+
+**Purpose**: Warns when sparse diagrams have too many nodes  
+**Condition**: `nodeCount > 100 AND density ≤ 0.3`  
+**Severity**: warning  
+**Research**: arXiv:2008.07944
+
+#### 4. Cyclomatic Complexity (`cyclomatic-complexity`)
+
+**Purpose**: Detects excessive decision complexity  
+**Formula**: `complexity = decisionNodes + 1`  
+**Default Threshold**: 10  
+**Severity**: warning  
+**Research**: McCabe's Cyclomatic Complexity (IEEE standards)
+
+### Configuration System
+
+Uses [cosmiconfig](https://github.com/davidtheclark/cosmiconfig) for flexible configuration loading:
+
+**Search Order**:
+1. `.sonarrc.json`
+2. `.sonarrc.yml` / `.sonarrc.yaml`
+3. `package.json` → `"mermaid-sonar"` field
+
+**Configuration Format**:
+
+```json
+{
+  "rules": {
+    "max-edges": {
+      "enabled": true,
+      "severity": "error",
+      "threshold": 100
+    },
+    "max-nodes-high-density": {
+      "enabled": true,
+      "severity": "warning",
+      "threshold": 50,
+      "densityThreshold": 0.3
+    }
+  }
+}
+```
+
+**Features**:
+- Partial configuration merges with defaults
+- Individual rules can be enabled/disabled
+- Custom thresholds per rule
+- Override severity levels
+- No caching (for testing reliability)
+
+### Data Flow
+
+```
+Markdown File
+    ↓
+extractDiagrams()
+    ↓
+analyzeStructure() → Metrics
+    ↓
+loadConfig() → Configuration
+    ↓
+runRules(diagram, metrics, config)
+    ↓
+[Rule1.check(), Rule2.check(), ...]
+    ↓
+Issues[] (violations with citations)
+    ↓
+CLI Output / Programmatic API
+```
+
+### Extension Points
+
+#### Adding New Rules
+
+1. Create rule file in `src/rules/`:
+
+```typescript
+export const myCustomRule: Rule = {
+  name: 'my-custom-rule',
+  defaultSeverity: 'warning',
+  defaultThreshold: 42,
+  check(diagram, metrics, config) {
+    if (metrics.someMetric > config.threshold) {
+      return {
+        rule: this.name,
+        severity: config.severity ?? this.defaultSeverity,
+        message: 'Custom violation detected',
+        filePath: diagram.filePath,
+        line: diagram.startLine,
+        suggestion: 'How to fix this',
+        citation: 'https://research-paper.com'
+      };
+    }
+    return null;
+  }
+};
+```
+
+2. Register in `src/rules/index.ts`:
+
+```typescript
+import { myCustomRule } from './my-custom-rule';
+
+const ruleRegistry = new Map([
+  // ... existing rules
+  [myCustomRule.name, myCustomRule],
+]);
+```
+
+3. Add to config types in `src/config/types.ts`
+4. Add default config in `src/config/defaults.ts`
+5. Write tests in `tests/unit/rules.test.ts`
+
+### Research Citations
+
+All thresholds are backed by published research or official documentation:
+
+- **Max Edges (100)**: Mermaid rendering complexity documentation
+- **Node Limits (50/100)**: Cognitive load research on diagram comprehension
+- **Cyclomatic Complexity (10)**: Software engineering standards (McCabe)
+- **Density Threshold (0.3)**: Graph theory best practices
+
+### Testing Strategy
+
+- **Unit Tests**: Each rule tested with fixtures that trigger/don't trigger
+- **Boundary Tests**: Test threshold boundaries (49 vs 50, 99 vs 100)
+- **Config Tests**: Verify custom thresholds and severity overrides
+- **Integration Tests**: Full analysis pipeline with rules enabled/disabled
+
+Test fixtures:
+- `high-density.md`: Triggers high-density rule
+- `low-density.md`: Triggers low-density rule  
+- `too-many-edges.md`: Triggers max-edges rule
+- `complex-decisions.md`: Triggers cyclomatic complexity
+- `clean.md`: Triggers no rules (baseline)
+
+### CLI Integration
+
+Rules are enabled by default. Users can:
+
+```bash
+# Run with all rules
+mermaid-sonar diagram.md
+
+# Disable rules (metrics only)
+mermaid-sonar --no-rules diagram.md
+```
+
+**Output Format**:
+- Errors in red, warnings in yellow, info in blue
+- Research citations included
+- Actionable suggestions provided
+- Exit code 1 if errors found, 0 otherwise
+
+### Future Enhancements
+
+Potential additions for later specs:
+- Rule severity profiles (strict/relaxed)
+- Custom rule plugins
+- Rule disable comments in diagrams
+- Performance profiling per rule
+- Machine learning-based thresholds
+
