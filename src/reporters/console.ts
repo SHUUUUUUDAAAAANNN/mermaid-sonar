@@ -73,7 +73,22 @@ export class ConsoleReporter implements Reporter {
     const color = severityColors[issue.severity];
     const line = `${issue.line}:1`;
 
-    return `  ${line}  ${color(issue.severity.padEnd(7))}  ${issue.message}  ${chalk.dim(issue.rule)}`;
+    const output: string[] = [];
+    output.push(
+      `  ${line}  ${color(issue.severity.padEnd(7))}  ${issue.message}  ${chalk.dim(issue.rule)}`
+    );
+
+    // Add suggestion if available
+    if (issue.suggestion) {
+      const suggestionLines = issue.suggestion.split('\n');
+      for (const suggestionLine of suggestionLines) {
+        if (suggestionLine.trim()) {
+          output.push(`    ${chalk.dim(suggestionLine)}`);
+        }
+      }
+    }
+
+    return output.join('\n');
   }
 
   /**

@@ -32,18 +32,54 @@ function extractNodeIds(content: string): string[] {
   const nodeIds = new Set<string>();
   const lines = content.split('\n');
 
+  // Mermaid keywords that should NEVER be extracted as node IDs
+  // (These are structural keywords, not directives that can reference nodes)
+  const structuralKeywords = new Set([
+    'graph',
+    'flowchart',
+    'subgraph',
+    'LR',
+    'TD',
+    'TB',
+    'RL',
+    'BT',
+    'LD',
+    'RD',
+  ]);
+
   for (const line of lines) {
     const trimmed = line.trim();
 
-    // Match node definitions and edges
-    // eslint-disable-next-line no-useless-escape
-    const nodePattern = /\b([a-zA-Z][a-zA-Z0-9]*)\b/g;
+    // Skip directive lines (they reference node IDs but don't define them)
+    if (
+      trimmed.startsWith('style ') ||
+      trimmed.startsWith('class ') ||
+      trimmed.startsWith('classDef ') ||
+      trimmed.startsWith('click ') ||
+      trimmed.startsWith('direction ') ||
+      trimmed === 'end'
+    ) {
+      continue;
+    }
+
+    // Skip graph/subgraph declaration lines
+    if (
+      trimmed.startsWith('graph ') ||
+      trimmed.startsWith('flowchart ') ||
+      trimmed.startsWith('subgraph ')
+    ) {
+      continue;
+    }
+
+    // Extract node IDs from node definitions and edges
+    // Patterns: NodeID[label], NodeID-->Other, NodeID, etc.
+    const nodePattern = /\b([a-zA-Z_][a-zA-Z0-9_]*)\b/g;
     let match;
 
     while ((match = nodePattern.exec(trimmed)) !== null) {
       const nodeId = match[1];
-      // Filter out Mermaid keywords
-      if (!['graph', 'flowchart', 'subgraph', 'LR', 'TD', 'TB', 'RL'].includes(nodeId)) {
+      // Filter out structural keywords only
+      if (!structuralKeywords.has(nodeId)) {
         nodeIds.add(nodeId);
       }
     }

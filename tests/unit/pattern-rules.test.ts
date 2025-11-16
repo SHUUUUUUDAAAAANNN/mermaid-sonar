@@ -198,6 +198,93 @@ describe('Pattern-based Rules', () => {
 
       expect(issue).toBeNull();
     });
+
+    it('should NOT flag "style" when used as a directive (not node ID)', () => {
+      const diagram: Diagram = {
+        content: `graph TD
+          Filter[File Filter] --> Match{Match?}
+          Match --> Print[Print Result]
+          style Filter fill:#fff3e0
+          style Match fill:#e1f5ff
+          style Print fill:#e8f5e9`,
+        startLine: 1,
+        filePath: 'test.md',
+        type: 'graph',
+      };
+
+      const metrics = analyzeStructure(diagram);
+      const config: RuleConfig = { enabled: true };
+      const issue = reservedWordsRule.check(diagram, metrics, config);
+
+      // Should be null because "style" is a directive, not a node ID
+      expect(issue).toBeNull();
+    });
+
+    it('should NOT flag "end" when used as subgraph closer (not node ID)', () => {
+      const diagram: Diagram = {
+        content: `graph TD
+          subgraph "Before Merge"
+            M1[Match 1]
+            C1[Context]
+          end
+
+          subgraph "After Merge"
+            M2[Match 2]
+            C2[Combined]
+          end
+
+          M1 --> M2`,
+        startLine: 1,
+        filePath: 'test.md',
+        type: 'graph',
+      };
+
+      const metrics = analyzeStructure(diagram);
+      const config: RuleConfig = { enabled: true };
+      const issue = reservedWordsRule.check(diagram, metrics, config);
+
+      // Should be null because "end" closes subgraphs, not used as node ID
+      expect(issue).toBeNull();
+    });
+
+    it('should flag "End" when used as a node ID', () => {
+      const diagram: Diagram = {
+        content: `graph TD
+          Start --> Process
+          Process --> End([Complete])`,
+        startLine: 1,
+        filePath: 'test.md',
+        type: 'graph',
+      };
+
+      const metrics = analyzeStructure(diagram);
+      const config: RuleConfig = { enabled: true };
+      const issue = reservedWordsRule.check(diagram, metrics, config);
+
+      // Should detect "End" as a reserved word used as node ID
+      expect(issue).not.toBeNull();
+      expect(issue?.rule).toBe('reserved-words');
+      expect(issue?.message).toContain('reserved/problematic');
+    });
+
+    it('should NOT flag "class" or "click" directives', () => {
+      const diagram: Diagram = {
+        content: `graph TD
+          A[Node A] --> B[Node B]
+          class A className1
+          click B "https://example.com"`,
+        startLine: 1,
+        filePath: 'test.md',
+        type: 'graph',
+      };
+
+      const metrics = analyzeStructure(diagram);
+      const config: RuleConfig = { enabled: true };
+      const issue = reservedWordsRule.check(diagram, metrics, config);
+
+      // Should be null because "class" and "click" are directives
+      expect(issue).toBeNull();
+    });
   });
 
   describe('Disconnected Components Rule', () => {
