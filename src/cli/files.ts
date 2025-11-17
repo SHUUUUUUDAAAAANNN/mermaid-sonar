@@ -100,7 +100,7 @@ async function scanDirectory(
         files.push(fullPath);
       }
     }
-  } catch (error) {
+  } catch {
     // Ignore permission errors and continue
   }
 
