@@ -58,7 +58,7 @@ Use the feature request template when creating an issue.
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/mermaid-sonar.git
+git clone https://github.com/iepathos/mermaid-sonar.git
 cd mermaid-sonar
 
 # Install dependencies
