@@ -120,4 +120,18 @@ describe('Exit Codes', () => {
     expect(determineExitCode(summary)).toBe(ExitCode.SUCCESS);
     expect(determineExitCode(summary, { strict: true })).toBe(ExitCode.SUCCESS);
   });
+
+  it('should return ERRORS_FOUND for syntax validation errors', () => {
+    const summary: Summary = {
+      filesAnalyzed: 1,
+      diagramsAnalyzed: 1,
+      totalIssues: 1,
+      errorCount: 1, // Syntax validation errors are categorized as errors
+      warningCount: 0,
+      infoCount: 0,
+      duration: 100,
+    };
+
+    expect(determineExitCode(summary)).toBe(ExitCode.ERRORS_FOUND);
+  });
 });
