@@ -45,13 +45,14 @@ mermaid-sonar --config .sonarrc.json docs/
 
 Mermaid-Sonar validates Mermaid syntax using the official Mermaid parser, catching errors before they cause rendering failures:
 
-```markdown
+**Invalid syntax example:**
+````markdown
 <!-- Invalid syntax - missing arrow -->
 ```mermaid
 graph TD
   A B
 ```
-```
+````
 
 **Detected error:**
 ```
