@@ -36,7 +36,9 @@
   "scripts": {
     "dev": "tsx watch src/cli.ts",
     "build": "tsup",
-    "test": "jest",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "jest",
+    "test:integration": "jest --config jest.integration.config.js",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lint": "eslint .",
@@ -118,7 +120,9 @@
       }
     },
     "moduleNameMapper": {
-      "^mermaid$": "<rootDir>/tests/mocks/mermaid.ts"
+      "^mermaid$": "<rootDir>/tests/mocks/mermaid.ts",
+      "^happy-dom$": "<rootDir>/tests/mocks/happy-dom.ts",
+      "^isomorphic-dompurify$": "<rootDir>/tests/mocks/isomorphic-dompurify.ts"
     }
   }
 }

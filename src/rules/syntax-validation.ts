@@ -38,7 +38,7 @@ function injectDOMPolyfill(context: typeof globalThis): void {
 
   // Set up DOMPurify for the global context
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (context as any).DOMPurify = createDOMPurify(window as unknown as Window);
+  (context as any).DOMPurify = createDOMPurify(window as any);
 }
 
 async function initializeMermaidParser(): Promise<void> {
