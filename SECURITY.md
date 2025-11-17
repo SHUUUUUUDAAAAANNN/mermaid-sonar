@@ -70,7 +70,7 @@ Configuration files are loaded using cosmiconfig. Ensure:
 
 Security updates and advisories will be published:
 
-- In the project's [GitHub Security Advisories](https://github.com/yourusername/mermaid-sonar/security/advisories)
+- In the project's [GitHub Security Advisories](https://github.com/iepathos/mermaid-sonar/security/advisories)
 - In the CHANGELOG.md with a `[SECURITY]` tag
 - As GitHub releases with detailed information
 
