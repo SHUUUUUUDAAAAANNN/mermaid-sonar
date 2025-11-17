@@ -21,16 +21,17 @@ import type { Metrics } from './types';
 function extractNodes(content: string): Set<string> {
   const nodes = new Set<string>();
 
-  // Pattern 1: Node definitions with shapes (A[label], B{label}, C((label)), etc.)
-  const nodeDefPattern = /\b([A-Z][A-Z0-9]*)\s*[[{()]/g;
+  // Pattern 1: Node definitions with shapes (A[label], Start[label], B{label}, etc.)
+  // Updated to match mixed case node IDs like Start, Filter, Skip
+  const nodeDefPattern = /\b([A-Z][A-Za-z0-9]*)\s*[[{()]/g;
   let match;
 
   while ((match = nodeDefPattern.exec(content)) !== null) {
     nodes.add(match[1]);
   }
 
-  // Pattern 2: Nodes in edge definitions (A --> B, A -.-> B, etc.)
-  const edgePattern = /\b([A-Z][A-Z0-9]*)\s*(?:-->|==>|-.->|===>|<-->|<-.->|o--|x--)/g;
+  // Pattern 2: Nodes in edge definitions (A --> B, Start --> End, etc.)
+  const edgePattern = /\b([A-Z][A-Za-z0-9]*)\s*(?:-->|==>|-.->|===>|<-->|<-.->|o--|x--)/g;
 
   while ((match = edgePattern.exec(content)) !== null) {
     nodes.add(match[1]);
@@ -38,7 +39,7 @@ function extractNodes(content: string): Set<string> {
 
   // Pattern 3: Nodes on the right side of edges
   const targetPattern =
-    /(?:-->|==>|-.->|===>|<-->|<-.->|o--|x--)\s*(?:\|[^|]+\|)?\s*\b([A-Z][A-Z0-9]*)\b/g;
+    /(?:-->|==>|-.->|===>|<-->|<-.->|o--|x--)\s*(?:\|[^|]+\|)?\s*\b([A-Z][A-Za-z0-9]*)\b/g;
 
   while ((match = targetPattern.exec(content)) !== null) {
     nodes.add(match[1]);
