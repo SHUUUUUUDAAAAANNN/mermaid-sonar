@@ -18,6 +18,7 @@ Mermaid diagrams are great for documentation, but complex diagrams can hurt more
 
 ## Features
 
+✅ **Syntax validation** - Detects Mermaid syntax errors before rendering
 ✅ **Research-backed thresholds** - Not arbitrary limits
 ✅ **Actionable recommendations** - Not just "too complex"
 ✅ **Multiple output formats** - Terminal, JSON, Markdown, GitHub Actions
@@ -37,6 +38,35 @@ mermaid-sonar docs/**/*.md
 # With custom config
 mermaid-sonar --config .sonarrc.json docs/
 ```
+
+## Syntax Validation
+
+Mermaid-Sonar validates Mermaid syntax using the official Mermaid parser, catching errors before they cause rendering failures:
+
+```markdown
+<!-- Invalid syntax - missing arrow -->
+```mermaid
+graph TD
+  A B
+```
+```
+
+**Detected error:**
+```
+❌ docs/example.md:3
+   Syntax error: Parse error on line 2:
+   A B
+   ---^
+   Expecting 'SEMI', 'NEWLINE', 'EOF', 'AMP', 'START_LINK', 'LINK', got 'ALPHA'
+   → Fix the Mermaid syntax or consult the Mermaid documentation
+```
+
+Syntax validation runs automatically on all diagrams and reports errors with:
+- **Line numbers**: Exact location of the syntax error
+- **Error context**: What the parser expected vs. what it found
+- **Exit code**: Non-zero exit code (1) for CI/CD integration
+
+This ensures your diagrams are syntactically correct before analyzing complexity.
 
 ## Example Output
 
