@@ -18,12 +18,12 @@ Mermaid diagrams are great for documentation, but complex diagrams can hurt more
 
 ## Features
 
-✅ **Research-backed thresholds** - Not arbitrary limits
-✅ **Actionable recommendations** - Not just "too complex"
-✅ **Multiple output formats** - Terminal, JSON, Markdown, GitHub Actions
-✅ **Zero rendering dependencies** - Pure static analysis
-✅ **Fast** - Analyzes hundreds of diagrams in seconds
-✅ **Configurable** - Adjust thresholds to your needs
+- **Research-backed thresholds** - Not arbitrary limits
+- **Actionable recommendations** - Not just "too complex"
+- **Multiple output formats** - Terminal, JSON, Markdown, GitHub Actions
+- **Zero rendering dependencies** - Pure static analysis
+- **Fast** - Analyzes hundreds of diagrams in seconds
+- **Configurable** - Adjust thresholds to your needs
 
 ## Quick Start
 
