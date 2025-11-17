@@ -181,7 +181,7 @@ interface JSONOutput {
 
 ```json
 {
-  "version": "0.1.0",
+  "version": "1.0.0",
   "summary": {
     "filesAnalyzed": 3,
     "diagramsAnalyzed": 5,
@@ -517,7 +517,7 @@ All thresholds are based on published research:
 
 ```bash
 # Setup
-git clone https://github.com/yourusername/mermaid-sonar.git
+git clone https://github.com/iepathos/mermaid-sonar.git
 cd mermaid-sonar
 npm install
 
