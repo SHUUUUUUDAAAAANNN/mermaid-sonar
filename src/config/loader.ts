@@ -53,6 +53,10 @@ function mergeConfig(userConfig: PartialConfig): Config {
         ...defaultConfig.rules['horizontal-chain-too-long'],
         ...userConfig.rules?.['horizontal-chain-too-long'],
       },
+      'horizontal-width-readability': {
+        ...defaultConfig.rules['horizontal-width-readability'],
+        ...userConfig.rules?.['horizontal-width-readability'],
+      },
       'long-labels': {
         ...defaultConfig.rules['long-labels'],
         ...userConfig.rules?.['long-labels'],

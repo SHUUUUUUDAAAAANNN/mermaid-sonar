@@ -196,6 +196,92 @@ describe('Rule System', () => {
     });
   });
 
+  describe('Horizontal Width Readability Rule', () => {
+    describe('LR Layout', () => {
+      it('should trigger on wide LR layouts with many nodes', async () => {
+        const results = await analyzeDiagramFileWithRules('tests/fixtures/wide-lr-layout.md');
+        expect(results).toHaveLength(1);
+
+        const widthIssue = results[0].issues?.find(
+          (i) => i.rule === 'horizontal-width-readability'
+        );
+        expect(widthIssue).toBeDefined();
+        expect(widthIssue!.message).toContain('sequential nodes');
+        expect(widthIssue!.message).toContain('LR layout');
+      });
+
+      it('should suggest TD conversion for LR layouts', async () => {
+        const results = await analyzeDiagramFileWithRules('tests/fixtures/wide-lr-layout.md');
+        const widthIssue = results[0].issues?.find(
+          (i) => i.rule === 'horizontal-width-readability'
+        );
+
+        expect(widthIssue!.suggestion).toContain('Convert to TD');
+        expect(widthIssue!.suggestion).toContain('top-down');
+      });
+    });
+
+    describe('TD Layout', () => {
+      it('should trigger on wide TD layouts with many branches', async () => {
+        const results = await analyzeDiagramFileWithRules('tests/fixtures/wide-td-branches.md');
+        expect(results).toHaveLength(1);
+
+        const widthIssue = results[0].issues?.find(
+          (i) => i.rule === 'horizontal-width-readability'
+        );
+        expect(widthIssue).toBeDefined();
+        expect(widthIssue!.message).toContain('parallel branches');
+        expect(widthIssue!.message).toContain('TD layout');
+      });
+
+      it('should NOT suggest LR conversion for TD layouts', async () => {
+        const results = await analyzeDiagramFileWithRules('tests/fixtures/wide-td-branches.md');
+        const widthIssue = results[0].issues?.find(
+          (i) => i.rule === 'horizontal-width-readability'
+        );
+
+        expect(widthIssue!.suggestion).not.toContain('Convert to LR');
+        expect(widthIssue!.suggestion).toContain('subgraph');
+      });
+    });
+
+    it('should not trigger on clean diagrams with reasonable width', async () => {
+      const results = await analyzeDiagramFileWithRules('tests/fixtures/clean.md');
+
+      const widthIssue = results[0].issues?.find((i) => i.rule === 'horizontal-width-readability');
+      expect(widthIssue).toBeUndefined();
+    });
+
+    it('should respect custom width thresholds', async () => {
+      const diagrams = extractDiagramsFromFile('tests/fixtures/clean.md');
+      const metrics = analyzeStructure(diagrams[0]);
+
+      const customConfig: Config = {
+        ...defaultConfig,
+        rules: {
+          ...defaultConfig.rules,
+          'horizontal-width-readability': {
+            enabled: true,
+            severity: 'warning',
+            targetWidth: 100, // Very low threshold to trigger on clean diagram
+            thresholds: {
+              info: 200,
+              warning: 300,
+              error: 400,
+            },
+            charWidth: 8,
+            nodeSpacing: 50,
+          },
+        },
+      };
+
+      const issues = await runRules(diagrams[0], metrics, customConfig);
+      const widthIssue = issues.find((i) => i.rule === 'horizontal-width-readability');
+
+      expect(widthIssue).toBeDefined();
+    });
+  });
+
   describe('Issue Format', () => {
     it('should include all required fields in issues', async () => {
       const results = await analyzeDiagramFileWithRules('tests/fixtures/too-many-edges.md');
