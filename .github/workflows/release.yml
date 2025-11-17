@@ -24,7 +24,6 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
 
       - name: Install dependencies
         run: npm ci
@@ -35,12 +34,8 @@ jobs:
       - name: Run tests
         run: npm test
 
-      # TODO: Re-enable after setting up trusted publishing on npmjs.com
-      # For v1.0.0: publish manually with `npm publish --access public`
-      # - name: Publish to npm
-      #   run: npm publish --provenance --access public
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to npm
+        run: npm publish --provenance --access public
 
       - name: Extract version from tag
         id: version
