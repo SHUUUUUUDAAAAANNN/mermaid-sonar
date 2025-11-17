@@ -30,6 +30,8 @@ lint:
 format:
     npm run format
 
+fmt: format
+
 format-check:
     npm run format:check
 
