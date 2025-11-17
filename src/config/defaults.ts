@@ -49,6 +49,18 @@ export const defaultConfig: Config = {
         TD: 12,
       },
     },
+    'horizontal-width-readability': {
+      enabled: true,
+      severity: 'warning',
+      targetWidth: 1200,
+      thresholds: {
+        info: 1500,
+        warning: 2000,
+        error: 2500,
+      },
+      charWidth: 8,
+      nodeSpacing: 50,
+    },
     'long-labels': {
       enabled: true,
       severity: 'warning',

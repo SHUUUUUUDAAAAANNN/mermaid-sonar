@@ -18,6 +18,7 @@ import { reservedWordsRule } from './reserved-words';
 import { disconnectedRule } from './disconnected';
 import { syntaxValidationRule } from './syntax-validation';
 import { horizontalChainLengthRule } from './horizontal-chain-length';
+import { horizontalWidthReadabilityRule } from './horizontal-width-readability';
 
 /**
  * Registry of all available rules
@@ -30,6 +31,7 @@ const ruleRegistry = new Map<string, Rule>([
   [cyclomaticComplexityRule.name, cyclomaticComplexityRule],
   [layoutHintRule.name, layoutHintRule],
   [horizontalChainLengthRule.name, horizontalChainLengthRule],
+  [horizontalWidthReadabilityRule.name, horizontalWidthReadabilityRule],
   [longLabelsRule.name, longLabelsRule],
   [reservedWordsRule.name, reservedWordsRule],
   [disconnectedRule.name, disconnectedRule],

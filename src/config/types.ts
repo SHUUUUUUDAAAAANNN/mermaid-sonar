@@ -19,6 +19,7 @@ export interface Config {
     'cyclomatic-complexity': RuleConfig;
     'layout-hint': RuleConfig;
     'horizontal-chain-too-long': RuleConfig;
+    'horizontal-width-readability': RuleConfig;
     'long-labels': RuleConfig;
     'reserved-words': RuleConfig;
     'disconnected-components': RuleConfig;
