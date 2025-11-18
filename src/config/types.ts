@@ -20,6 +20,7 @@ export interface Config {
     'layout-hint': RuleConfig;
     'horizontal-chain-too-long': RuleConfig;
     'horizontal-width-readability': RuleConfig;
+    'vertical-height-readability': RuleConfig;
     'long-labels': RuleConfig;
     'reserved-words': RuleConfig;
     'disconnected-components': RuleConfig;

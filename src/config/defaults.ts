@@ -54,12 +54,24 @@ export const defaultConfig: Config = {
       severity: 'warning',
       targetWidth: 1200,
       thresholds: {
-        info: 1200,    // Exceeding viewport = info
+        info: 1200, // Exceeding viewport = info
         warning: 1500, // Readability problem = warning
-        error: 2500,   // Severely unreadable = error
+        error: 2500, // Severely unreadable = error
       },
       charWidth: 8,
       nodeSpacing: 50,
+    },
+    'vertical-height-readability': {
+      enabled: true,
+      severity: 'warning',
+      targetHeight: 800,
+      thresholds: {
+        info: 800, // Exceeding comfortable viewport = info
+        warning: 1200, // Readability problem = warning
+        error: 2000, // Severely tall = error
+      },
+      nodeHeight: 40,
+      verticalSpacing: 50,
     },
     'long-labels': {
       enabled: true,
