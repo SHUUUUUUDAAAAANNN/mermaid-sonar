@@ -36,7 +36,7 @@
   "scripts": {
     "dev": "tsx watch src/cli.ts",
     "build": "tsup",
-    "test": "npm run test:unit && npm run test:integration",
+    "test": "npm run build && npm run test:unit && npm run test:integration",
     "test:unit": "jest",
     "test:integration": "jest --config jest.integration.config.js",
     "test:watch": "jest --watch",

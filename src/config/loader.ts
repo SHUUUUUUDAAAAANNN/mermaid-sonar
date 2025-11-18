@@ -57,6 +57,10 @@ function mergeConfig(userConfig: PartialConfig): Config {
         ...defaultConfig.rules['horizontal-width-readability'],
         ...userConfig.rules?.['horizontal-width-readability'],
       },
+      'vertical-height-readability': {
+        ...defaultConfig.rules['vertical-height-readability'],
+        ...userConfig.rules?.['vertical-height-readability'],
+      },
       'long-labels': {
         ...defaultConfig.rules['long-labels'],
         ...userConfig.rules?.['long-labels'],

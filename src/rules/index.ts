@@ -19,6 +19,7 @@ import { disconnectedRule } from './disconnected';
 import { syntaxValidationRule } from './syntax-validation';
 import { horizontalChainLengthRule } from './horizontal-chain-length';
 import { horizontalWidthReadabilityRule } from './horizontal-width-readability';
+import { verticalHeightReadabilityRule } from './vertical-height-readability';
 
 /**
  * Registry of all available rules
@@ -32,6 +33,7 @@ const ruleRegistry = new Map<string, Rule>([
   [layoutHintRule.name, layoutHintRule],
   [horizontalChainLengthRule.name, horizontalChainLengthRule],
   [horizontalWidthReadabilityRule.name, horizontalWidthReadabilityRule],
+  [verticalHeightReadabilityRule.name, verticalHeightReadabilityRule],
   [longLabelsRule.name, longLabelsRule],
   [reservedWordsRule.name, reservedWordsRule],
   [disconnectedRule.name, disconnectedRule],

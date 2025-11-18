@@ -61,6 +61,18 @@ export const defaultConfig: Config = {
       charWidth: 8,
       nodeSpacing: 50,
     },
+    'vertical-height-readability': {
+      enabled: true,
+      severity: 'warning',
+      targetHeight: 800,
+      thresholds: {
+        info: 800, // Exceeding comfortable viewport = info
+        warning: 1200, // Readability problem = warning
+        error: 2000, // Severely tall = error
+      },
+      nodeHeight: 40,
+      verticalSpacing: 50,
+    },
     'long-labels': {
       enabled: true,
       severity: 'warning',
