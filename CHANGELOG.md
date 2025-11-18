@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2025-11-17
+
+### Added
+- **Horizontal Width Readability Rule** - Detects diagrams exceeding viewport width limits
+  - Layout-specific width estimation (LR: sequential chains, TD: branching width)
+  - Configurable thresholds (info: 1500px, warning: 2000px, error: 2500px)
+  - Layout-specific suggestions (LR suggests TD conversion when appropriate)
+  - Multi-shape label extraction support
+- **Horizontal Chain Length Validation** - Warns about excessively long linear chains
+  - Layout-specific thresholds (LR/RL: 8 nodes, TD/TB: 12 nodes)
+  - Linear chain detection algorithm with cycle handling
+  - Bidirectional validation prevents contradictory layout suggestions
+  - Integration with layout-hint rule to suppress inappropriate TD→LR recommendations
+- **Vertical Height Readability Rule** - Detects diagrams exceeding viewport height
+  - Layout-direction aware (TD/TB: depth-based, LR/RL: width-based height calculation)
+  - Configurable thresholds (info: 800px, warning: 1200px, error: 2000px)
+  - Layout-specific fix suggestions
+  - Coordinates with horizontal-width-readability to detect multi-dimensional issues
+- **Enhanced Documentation**
+  - Comprehensive rule documentation in docs/rules.md for all new rules
+  - Real-world examples and fix suggestions
+  - Width/height calculation formulas explained
+  - Configuration options documented
+
+### Fixed
+- Label text no longer counted as separate nodes in structure analyzer
+- Mixed-case node IDs now correctly recognized (e.g., Start, Filter, Skip)
+- Build now runs before tests to ensure CLI availability in integration tests
+- Node extraction patterns improved to prevent false positives from shape delimiters
+
+### Changed
+- Stricter thresholds for horizontal-width-readability rule
+  - info threshold lowered to 1200px (viewport exceedance)
+  - warning threshold lowered to 1500px (was 2000px)
+  - error threshold set to 2500px for severely unreadable diagrams
+- Updated release workflow to publish to npm with OIDC authentication
+- Improved width calculation for LR/RL layouts using longest linear chain instead of total node count (20-30% reduction in false positives)
+
+### CI/CD
+- Bumped actions/upload-artifact from v4 to v5
+- Enhanced npm publishing workflow with OIDC support
+
 ## [1.0.0] - 2025-11-16
 
 ### Added
