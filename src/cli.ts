@@ -34,6 +34,9 @@ interface CLIOptions {
   strict: boolean;
   maxWarnings?: number;
   noRules: boolean;
+  viewportProfile?: string;
+  maxWidth?: number;
+  maxHeight?: number;
 }
 
 /**
@@ -61,7 +64,20 @@ async function runCLI(files: string[], options: CLIOptions): Promise<number> {
     }
 
     // Load configuration
-    const config = options.config ? loadConfigSync(options.config) : loadConfigSync();
+    let config = options.config ? loadConfigSync(options.config) : loadConfigSync();
+
+    // Apply CLI viewport overrides if provided
+    if (options.viewportProfile || options.maxWidth || options.maxHeight) {
+      config = {
+        ...config,
+        viewport: {
+          ...config.viewport,
+          ...(options.viewportProfile && { profile: options.viewportProfile }),
+          ...(options.maxWidth && { maxWidth: options.maxWidth }),
+          ...(options.maxHeight && { maxHeight: options.maxHeight }),
+        },
+      };
+    }
 
     // Analyze all files
     const allResults: AnalysisResult[] = [];
@@ -145,6 +161,20 @@ program
   .option('-s, --strict', 'Treat warnings as errors', false)
   .option('--max-warnings <number>', 'Maximum warnings before failing', (val) => parseInt(val, 10))
   .option('--no-rules', 'Disable rule validation (only show metrics)', false)
+  .option(
+    '--viewport-profile <name>',
+    'Viewport profile (default, mkdocs, docusaurus, github, mobile)'
+  )
+  .option(
+    '--max-width <pixels>',
+    'Maximum diagram width in pixels (diagrams exceeding this will ERROR)',
+    (val) => parseInt(val, 10)
+  )
+  .option(
+    '--max-height <pixels>',
+    'Maximum diagram height in pixels (diagrams exceeding this will ERROR)',
+    (val) => parseInt(val, 10)
+  )
   .action(async (files: string[], options: CLIOptions) => {
     // Validate format
     const validFormats: OutputFormat[] = ['console', 'json', 'markdown', 'github', 'junit'];

@@ -551,6 +551,47 @@ graph TD
 - `nodeSpacing` (number): Mermaid node spacing in pixels (default: 50)
 - `severity` ("error" | "warning" | "info"): Override severity for all violations
 
+**Viewport Configuration**:
+
+This rule uses viewport profiles to determine appropriate width thresholds for different rendering contexts. Configure viewport constraints to match your documentation framework:
+
+```bash
+# Use MkDocs profile (800px max width)
+mermaid-sonar --viewport-profile mkdocs docs/
+
+# Override max width via CLI
+mermaid-sonar --max-width 1000 docs/
+```
+
+```json
+{
+  "mermaid-sonar": {
+    "viewport": {
+      "profile": "mkdocs",
+      "maxWidth": 800
+    },
+    "rules": {
+      "horizontal-width-readability": {
+        "enabled": true
+      }
+    }
+  }
+}
+```
+
+**How viewport profiles affect this rule**:
+- Profile `maxWidth` sets the error threshold
+- Profile `widthThresholds` define info/warning/error severity levels
+- Built-in profiles (mkdocs, docusaurus, github, mobile) have pre-configured safe widths
+- CLI flags `--max-width` and `--viewport-profile` override config file settings
+
+For example, with the `mkdocs` profile (800px max width), this rule will:
+- Trigger **info** at 600px estimated width
+- Trigger **warning** at 700px estimated width
+- Trigger **error** at 800px estimated width
+
+See the [Viewport Configuration](./configuration.md#viewport-configuration) section for complete details on configuring viewport constraints.
+
 **How width is calculated**:
 
 - **LR/RL layouts**: `nodeCount × avgLabelLength × charWidth + nodeCount × nodeSpacing`
@@ -809,6 +850,47 @@ graph LR
 - `nodeHeight` (number): Mermaid node height in pixels (default: 40)
 - `verticalSpacing` (number): Vertical spacing between nodes in pixels (default: 50)
 - `severity` ("error" | "warning" | "info"): Override severity for all violations
+
+**Viewport Configuration**:
+
+This rule uses viewport profiles to determine appropriate height thresholds for different rendering contexts. Configure viewport constraints to match your documentation framework:
+
+```bash
+# Use MkDocs profile (1500px max height)
+mermaid-sonar --viewport-profile mkdocs docs/
+
+# Override max height via CLI
+mermaid-sonar --max-height 1200 docs/
+```
+
+```json
+{
+  "mermaid-sonar": {
+    "viewport": {
+      "profile": "mkdocs",
+      "maxHeight": 1500
+    },
+    "rules": {
+      "vertical-height-readability": {
+        "enabled": true
+      }
+    }
+  }
+}
+```
+
+**How viewport profiles affect this rule**:
+- Profile `maxHeight` sets the error threshold
+- Profile `heightThresholds` define info/warning/error severity levels
+- Built-in profiles (mkdocs, docusaurus, github, mobile) have pre-configured safe heights
+- CLI flags `--max-height` and `--viewport-profile` override config file settings
+
+For example, with the `mkdocs` profile (1500px max height), this rule will:
+- Trigger **info** at 1000px estimated height
+- Trigger **warning** at 1200px estimated height
+- Trigger **error** at 1500px estimated height
+
+See the [Viewport Configuration](./configuration.md#viewport-configuration) section for complete details on configuring viewport constraints.
 
 **How height is calculated**:
 
