@@ -24,6 +24,15 @@ const explorer = cosmiconfig('sonar', {
  */
 function mergeConfig(userConfig: PartialConfig): Config {
   return {
+    viewport: {
+      ...defaultConfig.viewport,
+      ...userConfig.viewport,
+      // Merge profiles if both exist
+      profiles: {
+        ...defaultConfig.viewport?.profiles,
+        ...userConfig.viewport?.profiles,
+      },
+    },
     rules: {
       'syntax-validation': {
         ...defaultConfig.rules['syntax-validation'],

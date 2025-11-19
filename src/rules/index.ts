@@ -8,6 +8,7 @@ import type { Rule, Issue } from './types';
 import type { Diagram } from '../extractors/types';
 import type { Metrics } from '../analyzers/types';
 import type { Config } from '../config/types';
+import { resolveViewportConfig } from '../config/viewport-resolver';
 
 import { maxEdgesRule } from './max-edges';
 import { maxNodesHighDensityRule, maxNodesLowDensityRule } from './cognitive-load';
@@ -73,12 +74,44 @@ export async function runRules(
 ): Promise<Issue[]> {
   const issues: Issue[] = [];
 
+  // Only resolve viewport config if viewport configuration exists
+  const hasViewportConfig =
+    config.viewport &&
+    (config.viewport.profile ||
+      config.viewport.maxWidth ||
+      config.viewport.maxHeight ||
+      config.viewport.profiles);
+
+  const viewportConfig = hasViewportConfig
+    ? resolveViewportConfig(config.viewport, undefined, undefined)
+    : null;
+
   for (const [ruleName, rule] of ruleRegistry) {
-    const ruleConfig = config.rules[ruleName as keyof typeof config.rules];
+    let ruleConfig = config.rules[ruleName as keyof typeof config.rules];
 
     // Skip disabled rules
     if (!ruleConfig || !ruleConfig.enabled) {
       continue;
+    }
+
+    // Apply viewport configuration to width/height rules only if viewport config exists
+    if (
+      viewportConfig &&
+      (ruleName === 'horizontal-width-readability' || ruleName === 'vertical-height-readability')
+    ) {
+      const isWidth = ruleName === 'horizontal-width-readability';
+      const thresholds = isWidth ? viewportConfig.widthThresholds : viewportConfig.heightThresholds;
+
+      ruleConfig = {
+        ...ruleConfig,
+        targetWidth: isWidth ? viewportConfig.maxWidth : (ruleConfig.targetWidth as number),
+        targetHeight: isWidth ? (ruleConfig.targetHeight as number) : viewportConfig.maxHeight,
+        thresholds: {
+          info: thresholds.info,
+          warning: thresholds.warning,
+          error: thresholds.error,
+        },
+      };
     }
 
     // Support both sync and async rules
