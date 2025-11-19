@@ -1,0 +1,56 @@
+{
+  "completion_percentage": 70.0,
+  "status": "incomplete",
+  "implemented": [
+    "ViewportProfile and ViewportConfig types added to config/types.ts",
+    "Built-in viewport profiles created (default, mkdocs, docusaurus, github, mobile) in viewport-profiles.ts",
+    "Viewport resolution logic implemented in viewport-resolver.ts with correct priority order",
+    "Config loader updated to merge viewport configuration in loader.ts",
+    "CLI flags added: --viewport-profile, --max-width, --max-height in cli.ts",
+    "Rules registry updated to apply viewport config to width/height rules in rules/index.ts",
+    "Viewport types and functions exported from config/index.ts",
+    "Backward compatibility maintained - existing configs work without viewport settings",
+    "All existing tests pass (215 tests)",
+    "README.md mentions viewport readability features",
+    "Basic configuration tests exist in tests/unit/config.test.ts"
+  ],
+  "missing": [
+    "Dedicated 'Viewport Configuration' section in docs/configuration.md",
+    "Viewport-specific unit tests (profile selection, resolution logic, CLI overrides)",
+    "Integration tests verifying viewport constraints are applied during analysis",
+    "Real-world ripgrep example test case (mkdocs profile)",
+    "Rule documentation explaining viewport configuration options for horizontal-width-readability and vertical-height-readability"
+  ],
+  "gaps": {
+    "missing_viewport_config_documentation": {
+      "description": "docs/configuration.md does not have a dedicated 'Viewport Configuration' section as required by acceptance criteria. The spec explicitly requires: 'Configuration guide (docs/configuration.md) has dedicated section on viewport constraints'",
+      "location": "docs/configuration.md",
+      "severity": "high",
+      "suggested_fix": "Add a 'Viewport Configuration' section after 'Rule Configuration' section explaining:\n1. How to configure viewport profiles\n2. Built-in profiles (mkdocs, docusaurus, github, mobile, default)\n3. How to create custom profiles\n4. CLI flag usage (--viewport-profile, --max-width, --max-height)\n5. Examples for common frameworks\n6. Priority order of configuration sources"
+    },
+    "missing_viewport_unit_tests": {
+      "description": "No unit tests specifically for viewport functionality. Spec requires: 'Unit tests verify configuration loading and merging behavior'",
+      "location": "tests/unit/",
+      "severity": "high",
+      "suggested_fix": "Create tests/unit/viewport.test.ts with tests for:\n1. resolveViewportConfig with different priority sources (CLI > config > profile > default)\n2. Built-in profile selection\n3. Custom profile definition and merging\n4. CLI override behavior\n5. Threshold calculation from profiles\n6. Invalid profile handling"
+    },
+    "missing_viewport_integration_tests": {
+      "description": "No integration tests verifying viewport constraints are applied correctly. Spec requires: 'Integration tests verify viewport constraints are applied correctly during analysis'",
+      "location": "tests/integration/",
+      "severity": "high",
+      "suggested_fix": "Create tests/integration/viewport.test.ts with tests for:\n1. Analyzing diagrams with different viewport profiles\n2. Verifying mkdocs profile catches wider diagrams\n3. Verifying CLI overrides work end-to-end\n4. Testing profile application affects rule severity"
+    },
+    "missing_ripgrep_example_test": {
+      "description": "No real-world ripgrep example test. Spec requires: 'Real-world example: ripgrep count-list.md diagram triggers error with mkdocs profile but passes with default'",
+      "location": "tests/",
+      "severity": "medium",
+      "suggested_fix": "Create a test that:\n1. Uses a diagram similar to ripgrep's count-list.md (LR layout, 16 nodes, longest chain 6)\n2. Verifies it passes with default profile (2500px max width)\n3. Verifies it fails/warns with mkdocs profile (800px max width)\n4. Documents this as the canonical real-world example"
+    },
+    "incomplete_rule_documentation": {
+      "description": "docs/rules.md mentions viewport but doesn't explain how to configure viewport options for the width/height rules. Spec requires: 'Rule documentation (docs/rules.md) explains viewport configuration options'",
+      "location": "docs/rules.md",
+      "severity": "medium",
+      "suggested_fix": "Update horizontal-width-readability and vertical-height-readability rule documentation to explain:\n1. How viewport profiles affect these rules\n2. How to use --max-width and --max-height CLI flags\n3. How to configure viewport profiles in .sonarrc.json\n4. Examples of using mkdocs profile for documentation sites\n5. Reference to the Viewport Configuration section in configuration.md"
+    }
+  }
+}

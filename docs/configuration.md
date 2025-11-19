@@ -269,6 +269,243 @@ Suggests optimal layout direction.
 - `tall-threshold` (number, default: `6`): Depth for TD suggestion
 - `severity` ("error"|"warning"|"info", default: `"info"`): Violation severity
 
+## Viewport Configuration
+
+Mermaid-Sonar supports viewport constraints to ensure diagrams render properly within different documentation frameworks and screen sizes.
+
+### Built-in Viewport Profiles
+
+Use pre-configured profiles for common rendering contexts:
+
+```bash
+# MkDocs documentation sites (~800-900px content width)
+mermaid-sonar --viewport-profile mkdocs docs/
+
+# Docusaurus documentation (~900-1000px content width)
+mermaid-sonar --viewport-profile docusaurus docs/
+
+# GitHub README files (~1000px content width)
+mermaid-sonar --viewport-profile github README.md
+
+# Mobile devices (400px width)
+mermaid-sonar --viewport-profile mobile docs/
+```
+
+**Available built-in profiles**:
+
+| Profile | Max Width | Max Height | Use Case |
+|---------|-----------|------------|----------|
+| `default` | 2500px | 2000px | Standard browser viewport |
+| `mkdocs` | 800px | 1500px | MkDocs with sidebar |
+| `docusaurus` | 900px | 1500px | Docusaurus framework |
+| `github` | 1000px | 1800px | GitHub markdown |
+| `mobile` | 400px | 800px | Mobile devices |
+
+### CLI Viewport Flags
+
+Override viewport constraints with command-line flags:
+
+```bash
+# Set maximum width
+mermaid-sonar --max-width 1200 docs/
+
+# Set maximum height
+mermaid-sonar --max-height 1000 docs/
+
+# Set both dimensions
+mermaid-sonar --max-width 1200 --max-height 1000 docs/
+
+# Combine with profile (CLI overrides profile)
+mermaid-sonar --viewport-profile mkdocs --max-width 1000 docs/
+```
+
+### Configuration File
+
+Configure viewport constraints in `.sonarrc.json`:
+
+```json
+{
+  "mermaid-sonar": {
+    "viewport": {
+      "profile": "mkdocs",
+      "maxWidth": 800,
+      "maxHeight": 1500
+    },
+    "rules": {
+      "horizontal-width-readability": {
+        "enabled": true
+      },
+      "vertical-height-readability": {
+        "enabled": true
+      }
+    }
+  }
+}
+```
+
+### Custom Viewport Profiles
+
+Define custom profiles for your specific rendering context:
+
+```json
+{
+  "mermaid-sonar": {
+    "viewport": {
+      "profile": "custom-docs",
+      "profiles": {
+        "custom-docs": {
+          "name": "custom-docs",
+          "description": "Custom documentation site",
+          "maxWidth": 1100,
+          "maxHeight": 1600,
+          "widthThresholds": {
+            "info": 800,
+            "warning": 950,
+            "error": 1100
+          },
+          "heightThresholds": {
+            "info": 1200,
+            "warning": 1400,
+            "error": 1600
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Configuration Priority
+
+Viewport configuration is resolved in this priority order (highest to lowest):
+
+1. **CLI flags**: `--max-width`, `--max-height`, `--viewport-profile`
+2. **Config direct overrides**: `viewport.maxWidth`, `viewport.maxHeight`
+3. **Profile selection**: `viewport.profile` or built-in profiles
+4. **Default profile**: Standard browser viewport (2500×2000)
+
+**Example priority demonstration**:
+
+```json
+{
+  "mermaid-sonar": {
+    "viewport": {
+      "profile": "mkdocs",
+      "maxWidth": 900
+    }
+  }
+}
+```
+
+```bash
+# Uses config maxWidth: 900px (overrides mkdocs profile's 800px)
+mermaid-sonar docs/
+
+# Uses CLI maxWidth: 1200px (overrides config's 900px)
+mermaid-sonar --max-width 1200 docs/
+```
+
+### How Viewport Affects Rules
+
+Viewport constraints are used by readability rules to detect diagrams that exceed comfortable viewing dimensions:
+
+- **horizontal-width-readability**: Checks if estimated diagram width exceeds viewport max width
+- **vertical-height-readability**: Checks if estimated diagram height exceeds viewport max height
+
+These rules trigger at different severity levels based on thresholds:
+
+```json
+{
+  "mermaid-sonar": {
+    "viewport": {
+      "profile": "mkdocs",
+      "profiles": {
+        "mkdocs": {
+          "maxWidth": 800,
+          "widthThresholds": {
+            "info": 600,
+            "warning": 700,
+            "error": 800
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+**Severity progression**:
+- **Info**: Diagram approaching limit (600px for mkdocs)
+- **Warning**: Diagram significantly exceeds safe size (700px for mkdocs)
+- **Error**: Diagram exceeds hard limit (800px for mkdocs)
+
+### Framework-Specific Examples
+
+#### MkDocs Documentation
+
+```json
+{
+  "mermaid-sonar": {
+    "viewport": {
+      "profile": "mkdocs"
+    },
+    "rules": {
+      "horizontal-width-readability": {
+        "enabled": true,
+        "severity": "error"
+      },
+      "vertical-height-readability": {
+        "enabled": true,
+        "severity": "warning"
+      }
+    }
+  }
+}
+```
+
+```bash
+# Analyze with mkdocs constraints
+mermaid-sonar docs/
+```
+
+#### GitHub README
+
+```bash
+# Quick check for GitHub rendering
+mermaid-sonar --viewport-profile github README.md
+```
+
+#### Docusaurus with Custom Width
+
+```json
+{
+  "mermaid-sonar": {
+    "viewport": {
+      "profile": "docusaurus",
+      "maxWidth": 950
+    }
+  }
+}
+```
+
+### Debugging Viewport Configuration
+
+Use verbose mode to see which viewport configuration is active:
+
+```bash
+mermaid-sonar --verbose docs/
+```
+
+Output includes:
+```
+Viewport configuration:
+  Source: profile
+  Profile: mkdocs
+  Max Width: 800px
+  Max Height: 1500px
+  Width Thresholds: info=600px, warning=700px, error=800px
+```
+
 ## Common Scenarios
 
 ### Strict Quality Gate
