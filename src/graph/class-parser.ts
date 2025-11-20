@@ -116,7 +116,6 @@ function extractClasses(content: string): Map<string, ClassNode> {
     // Match class definition: "class ClassName" or "class ClassName {" or "class Generic~Type~"
     const classMatch = /^class\s+([\w~<>,]+)\s*(\{?)/.exec(trimmed);
     if (classMatch) {
-
       const className = classMatch[1];
       const hasOpenBrace = classMatch[2] === '{';
 
@@ -139,7 +138,6 @@ function extractClasses(content: string): Map<string, ClassNode> {
     // Must start with a word character (not just ~) to avoid matching visibility modifiers
     const memberMatch = /^(\w[\w~<>,]*)\s*:\s*(.+)/.exec(trimmed);
     if (memberMatch) {
-
       const className = memberMatch[1];
       const member = memberMatch[2].trim();
 
@@ -271,7 +269,9 @@ function extractRelationships(content: string): ClassRelationship[] {
 
     // Match association with optional multiplicity: ClassA "1" --> "many" ClassB or Generic~Type~ --> ClassB
     const associationMatch =
-      /([\w~<>,]+)\s*(?:"([^"]+)")?\s*-->\s*(?:"([^"]+)")?\s*([\w~<>,]+)(?:\s*:\s*(.+))?/.exec(trimmed);
+      /([\w~<>,]+)\s*(?:"([^"]+)")?\s*-->\s*(?:"([^"]+)")?\s*([\w~<>,]+)(?:\s*:\s*(.+))?/.exec(
+        trimmed
+      );
     if (associationMatch) {
       relationships.push({
         from: associationMatch[1],

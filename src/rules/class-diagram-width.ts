@@ -12,10 +12,7 @@
 import type { Rule, Issue, RuleConfig } from './types';
 import type { Diagram } from '../extractors/types';
 import type { Metrics } from '../analyzers/types';
-import {
-  analyzeClassDiagram,
-  estimateClassDiagramWidth,
-} from '../analyzers/class-analyzer';
+import { analyzeClassDiagram, estimateClassDiagramWidth } from '../analyzers/class-analyzer';
 
 /**
  * Generates suggestions for reducing class diagram width
