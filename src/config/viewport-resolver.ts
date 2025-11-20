@@ -80,6 +80,9 @@ export function resolveViewportConfig(
       ...profile,
       maxWidth: viewportConfig.maxWidth ?? profile.maxWidth,
       maxHeight: viewportConfig.maxHeight ?? profile.maxHeight,
+      // Clear thresholds so they get recalculated based on new max values
+      ...(viewportConfig.maxWidth !== undefined && { widthThresholds: undefined }),
+      ...(viewportConfig.maxHeight !== undefined && { heightThresholds: undefined }),
     };
     source = 'config-direct';
   }
@@ -90,6 +93,9 @@ export function resolveViewportConfig(
       ...profile,
       maxWidth: cliOptions.maxWidth ?? profile.maxWidth,
       maxHeight: cliOptions.maxHeight ?? profile.maxHeight,
+      // Clear thresholds so they get recalculated based on new max values
+      ...(cliOptions.maxWidth !== undefined && { widthThresholds: undefined }),
+      ...(cliOptions.maxHeight !== undefined && { heightThresholds: undefined }),
     };
     source = 'cli';
   }
