@@ -22,6 +22,7 @@ Mermaid diagrams are great for documentation, but complex diagrams can hurt more
 
 ## Features
 
+- ✅ **Multi-diagram type support** - Flowcharts, graphs, state diagrams, class diagrams, and sequence diagrams
 - ✅ **Syntax validation** - Detects Mermaid syntax errors before rendering
 - ✅ **Research-backed thresholds** - Not arbitrary limits
 - ✅ **Actionable recommendations** - Not just "too complex"
@@ -158,7 +159,7 @@ interface JSONOutput {
       content: string;     // Raw Mermaid code
       startLine: number;   // 1-indexed line number
       filePath: string;    // Source file path
-      type: 'flowchart' | 'graph' | 'unknown';
+      type: 'flowchart' | 'graph' | 'state' | 'class' | 'sequenceDiagram' | 'unknown';
     };
     metrics: {
       nodeCount: number;
@@ -184,7 +185,7 @@ interface JSONOutput {
 
 ```json
 {
-  "version": "1.3.0",
+  "version": "1.4.0",
   "summary": {
     "filesAnalyzed": 3,
     "diagramsAnalyzed": 5,

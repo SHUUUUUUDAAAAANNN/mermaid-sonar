@@ -7,6 +7,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0] - 2025-11-20
+
+### Added
+- **State Diagram Support** - Complete analysis support for Mermaid state diagrams
+  - Supports both `stateDiagram` and `stateDiagram-v2` syntax
+  - State transition parsing including start/end state markers (`[*]`)
+  - Colon-labeled transition support (e.g., `StateA --> StateB : label`)
+  - Direction syntax detection (LR/RL/TD/TB)
+  - Width and height estimation with viewport constraint validation
+  - Comprehensive test coverage for v1/v2 syntax and all layout directions
+- **Class Diagram Support** - Comprehensive analysis for UML class diagrams
+  - Class definition and relationship parsing
+  - Width estimation based on class count and relationship complexity
+  - Height estimation for vertical layouts
+  - `class-diagram-width` rule for detecting overly wide diagrams
+  - Support for inheritance, composition, and association relationships
+- **Sequence Diagram Support** - Full analysis capabilities for sequence diagrams
+  - Participant parsing (both explicit and implicit declarations)
+  - Message type detection (sync, async, return, solid, dotted)
+  - Control structure parsing (loops, alts, pars) with nesting depth calculation
+  - Width estimation based on participant count
+  - Height estimation based on message count and control structure nesting
+  - New rules: `sequence-diagram-width` and `sequence-diagram-height`
+  - Complete unit and integration test coverage
+- **npm downloads badge** - Added download statistics badge to README for visibility
+
+### Fixed
+- **Readability threshold reporting** - Improved accuracy of threshold violation messages
+  - Now reports the actual triggered threshold (info/warning/error) instead of always showing the target
+  - Calculates `exceedsBy` relative to the triggered threshold for more accurate feedback
+  - Provides clearer guidance on which specific limit was exceeded and by how much
+
+### Changed
+- **Expanded diagram type support** - Extended beyond flowchart/graph to include state, class, and sequence diagrams
+  - DiagramType union now includes: 'flowchart', 'graph', 'state', 'class', 'sequenceDiagram'
+  - All existing readability rules now support the new diagram types
+  - Maintains backward compatibility with existing flowchart/graph analysis
+
 ## [1.3.0] - 2025-11-19
 
 ### Added
