@@ -62,6 +62,8 @@ export interface Config {
     'horizontal-width-readability': RuleConfig;
     'vertical-height-readability': RuleConfig;
     'class-diagram-width': RuleConfig;
+    'sequence-diagram-width': RuleConfig;
+    'sequence-diagram-height': RuleConfig;
     'long-labels': RuleConfig;
     'reserved-words': RuleConfig;
     'disconnected-components': RuleConfig;

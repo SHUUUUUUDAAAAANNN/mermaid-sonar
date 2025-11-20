@@ -209,6 +209,14 @@ function mergeConfig(userConfig: PartialConfig): Config {
         ...defaultConfig.rules['class-diagram-width'],
         ...userConfig.rules?.['class-diagram-width'],
       },
+      'sequence-diagram-width': {
+        ...defaultConfig.rules['sequence-diagram-width'],
+        ...userConfig.rules?.['sequence-diagram-width'],
+      },
+      'sequence-diagram-height': {
+        ...defaultConfig.rules['sequence-diagram-height'],
+        ...userConfig.rules?.['sequence-diagram-height'],
+      },
       'long-labels': {
         ...defaultConfig.rules['long-labels'],
         ...userConfig.rules?.['long-labels'],

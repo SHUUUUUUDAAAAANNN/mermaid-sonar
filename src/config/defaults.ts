@@ -83,6 +83,26 @@ export const defaultConfig: Config = {
         error: 2500,
       },
     },
+    'sequence-diagram-width': {
+      enabled: true,
+      severity: 'warning',
+      targetWidth: 1200,
+      thresholds: {
+        info: 1000, // ~5 participants
+        warning: 1400, // ~7 participants
+        error: 1800, // ~9 participants
+      },
+    },
+    'sequence-diagram-height': {
+      enabled: true,
+      severity: 'warning',
+      targetHeight: 800,
+      thresholds: {
+        info: 800, // ~20 messages
+        warning: 1200, // ~35 messages
+        error: 1600, // ~50 messages
+      },
+    },
     'long-labels': {
       enabled: true,
       severity: 'warning',
