@@ -26,7 +26,9 @@ interface HeightAnalysis {
   estimatedHeight: number;
   /** Target height threshold in pixels */
   targetHeight: number;
-  /** Pixels exceeding target */
+  /** The actual threshold that was triggered */
+  triggeredThreshold: number;
+  /** Pixels exceeding the triggered threshold */
   exceedsBy: number;
   /** Severity level (null if within limits) */
   severity: Severity | null;
@@ -163,21 +165,26 @@ function calculateHeightAnalysis(
   const warningThreshold = thresholds.warning ?? 1200;
   const errorThreshold = thresholds.error ?? 2000;
 
-  const exceedsBy = Math.max(0, estimatedHeight - targetHeight);
-
   let severity: Severity | null = null;
+  let triggeredThreshold = targetHeight;
   if (estimatedHeight >= errorThreshold) {
     severity = 'error';
+    triggeredThreshold = errorThreshold;
   } else if (estimatedHeight >= warningThreshold) {
     severity = 'warning';
+    triggeredThreshold = warningThreshold;
   } else if (estimatedHeight >= infoThreshold) {
     severity = 'info';
+    triggeredThreshold = infoThreshold;
   }
+
+  const exceedsBy = Math.max(0, estimatedHeight - triggeredThreshold);
 
   const result: HeightAnalysis = {
     layout,
     estimatedHeight,
     targetHeight,
+    triggeredThreshold,
     exceedsBy,
     severity,
     heightSource: source,
@@ -235,7 +242,7 @@ function generateSuggestions(analysis: HeightAnalysis): string {
 
   const header =
     `This ${analysis.layout} layout with ${sourceDescription} creates excessive height.\n` +
-    `Estimated height: ${analysis.estimatedHeight}px (exceeds ${analysis.targetHeight}px comfortable viewport by ${analysis.exceedsBy}px)\n\n` +
+    `Estimated height: ${analysis.estimatedHeight}px (exceeds ${analysis.triggeredThreshold}px limit by ${analysis.exceedsBy}px)\n\n` +
     `Why this matters: Users cannot compare or reference nodes that are scrolled out of view, ` +
     `breaking the fundamental purpose of visual diagrams.\n\n`;
 

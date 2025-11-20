@@ -39,7 +39,9 @@ interface WidthAnalysis {
   estimatedWidth: number;
   /** Target width threshold in pixels */
   targetWidth: number;
-  /** Pixels exceeding target */
+  /** The actual threshold that was triggered */
+  triggeredThreshold: number;
+  /** Pixels exceeding the triggered threshold */
   exceedsBy: number;
   /** Severity level (null if within limits) */
   severity: 'info' | 'warning' | 'error' | null;
@@ -230,16 +232,20 @@ function calculateWidthAnalysis(
   const warningThreshold = thresholds.warning ?? 2000;
   const errorThreshold = thresholds.error ?? 2500;
 
-  const exceedsBy = Math.max(0, estimatedWidth - targetWidth);
-
   let severity: 'info' | 'warning' | 'error' | null = null;
+  let triggeredThreshold = targetWidth;
   if (estimatedWidth >= errorThreshold) {
     severity = 'error';
+    triggeredThreshold = errorThreshold;
   } else if (estimatedWidth >= warningThreshold) {
     severity = 'warning';
+    triggeredThreshold = warningThreshold;
   } else if (estimatedWidth >= infoThreshold) {
     severity = 'info';
+    triggeredThreshold = infoThreshold;
   }
+
+  const exceedsBy = Math.max(0, estimatedWidth - triggeredThreshold);
 
   const widthSource = layout === 'LR' || layout === 'RL' ? 'sequential' : 'branching';
 
@@ -248,6 +254,7 @@ function calculateWidthAnalysis(
     labelMetrics,
     estimatedWidth,
     targetWidth,
+    triggeredThreshold,
     exceedsBy,
     severity,
     widthSource,
@@ -283,9 +290,9 @@ function generateSuggestions(analysis: WidthAnalysis, metrics: Metrics): string 
 
   const header = isHorizontal
     ? `This ${analysis.layout} layout with longest path of ${analysis.longestChainLength ?? metrics.nodeCount} nodes creates excessive width.\n` +
-      `Estimated width: ${analysis.estimatedWidth}px (exceeds ${analysis.targetWidth}px safe limit by ${analysis.exceedsBy}px)\n\n`
+      `Estimated width: ${analysis.estimatedWidth}px (exceeds ${analysis.triggeredThreshold}px limit by ${analysis.exceedsBy}px)\n\n`
     : `This ${analysis.layout} layout with ${metrics.maxBranchWidth} parallel branches creates excessive width.\n` +
-      `Estimated width: ${analysis.estimatedWidth}px (exceeds ${analysis.targetWidth}px safe limit by ${analysis.exceedsBy}px)\n\n`;
+      `Estimated width: ${analysis.estimatedWidth}px (exceeds ${analysis.triggeredThreshold}px limit by ${analysis.exceedsBy}px)\n\n`;
 
   return header + 'Suggestions:\n' + suggestions.map((s, i) => `${i + 1}. ${s}`).join('\n\n');
 }
