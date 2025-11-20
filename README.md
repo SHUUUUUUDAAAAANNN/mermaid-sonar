@@ -280,6 +280,26 @@ mermaid-sonar [options] <files...>
   - Shows raw metrics without applying rules
   - Useful for understanding diagram characteristics
 
+#### Viewport Constraints
+
+- `--viewport-profile <name>` - Use built-in viewport profile
+  - **default**: 2500×2000px (standard browser viewport)
+  - **mkdocs**: 800×1500px (MkDocs with sidebar)
+  - **docusaurus**: 900×1500px (Docusaurus framework)
+  - **github**: 1000×1800px (GitHub markdown)
+  - **mobile**: 400×800px (mobile devices)
+  - Example: `--viewport-profile mkdocs`
+
+- `--max-width <pixels>` - Maximum diagram width (hard limit)
+  - Diagrams exceeding this value will generate ERROR-level issues
+  - Overrides profile width if both specified
+  - Example: `--max-width 1200`
+
+- `--max-height <pixels>` - Maximum diagram height (hard limit)
+  - Diagrams exceeding this value will generate ERROR-level issues
+  - Overrides profile height if both specified
+  - Example: `--max-height 1000`
+
 #### Configuration
 
 - `-c, --config <path>` - Path to configuration file
@@ -369,6 +389,25 @@ mermaid-sonar --config .sonarrc.json docs/
 
 # Disable rules, show only metrics
 mermaid-sonar --no-rules docs/
+```
+
+#### Viewport Constraints
+
+```bash
+# Use MkDocs profile for documentation sites
+mermaid-sonar --viewport-profile mkdocs docs/
+
+# Use GitHub profile for README files
+mermaid-sonar --viewport-profile github README.md
+
+# Custom width and height limits
+mermaid-sonar --max-width 1200 --max-height 1600 docs/
+
+# Combine profile with custom overrides (CLI overrides profile)
+mermaid-sonar --viewport-profile mkdocs --max-height 2000 docs/
+
+# Use mobile profile for responsive design validation
+mermaid-sonar --viewport-profile mobile docs/
 ```
 
 ### CI/CD Integration
