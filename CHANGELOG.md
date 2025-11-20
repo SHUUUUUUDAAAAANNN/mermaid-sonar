@@ -7,6 +7,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2025-11-19
+
+### Added
+- **Comprehensive Diagram Type Support Planning** - Added detailed specifications (001-005) for future Mermaid diagram type support
+  - Spec 001: State diagram width/height estimation and viewport constraints
+  - Spec 002: Class diagram complexity analysis
+  - Spec 003: Sequence diagram interaction analysis
+  - Spec 004: ER diagram relationship analysis
+  - Spec 005: Additional diagram types (Gantt, GitGraph, Journey, Timeline, C4, Mindmap)
+  - Foundation for expanding beyond flowchart/graph analysis
+
+### Changed
+- **Improved horizontal width estimation algorithm** - More accurate path-based width calculation for LR/RL layouts
+  - New `calculateLongestPath()` function using DFS with cycle detection
+  - Handles decision branches and merge points more accurately
+  - Finds true longest paths through complex graphs instead of approximating
+  - Better accuracy for non-linear flowcharts with multiple branches
+- CLI excluded from unit test coverage (handled by integration tests instead)
+
 ## [1.2.0] - 2025-11-19
 
 ### Added

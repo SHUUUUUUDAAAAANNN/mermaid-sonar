@@ -182,8 +182,7 @@ function estimateWidth(
     // Use calculateLongestPath to account for decision branches and merge points
     const pathAnalysis = calculateLongestPath(graph);
     const width =
-      pathAnalysis.length * labelMetrics.avgLength * charWidth +
-      pathAnalysis.length * nodeSpacing;
+      pathAnalysis.length * labelMetrics.avgLength * charWidth + pathAnalysis.length * nodeSpacing;
     return {
       width,
       chainLength: pathAnalysis.length,

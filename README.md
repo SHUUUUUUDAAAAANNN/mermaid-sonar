@@ -183,7 +183,7 @@ interface JSONOutput {
 
 ```json
 {
-  "version": "1.0.0",
+  "version": "1.3.0",
   "summary": {
     "filesAnalyzed": 3,
     "diagramsAnalyzed": 5,
