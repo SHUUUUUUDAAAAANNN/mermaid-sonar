@@ -1,6 +1,6 @@
 {
   "name": "mermaid-sonar",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "description": "Detect complex and unreadable Mermaid diagrams using research-backed metrics and best practices",
   "keywords": [
     "mermaid",
